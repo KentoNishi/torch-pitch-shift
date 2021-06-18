@@ -1,8 +1,14 @@
+# import the libs
 import torch
-from gpu_pitch_shift import *
+from torch_pitch_shift import *
 
-a = torch.rand(2, 44100 * 2, dtype=torch.float32)
-pitch_shift = PitchShifter(41000)
+# create a random sample
+SAMPLE_RATE = 44100
+NUM_SECONDS = 2
+sample = torch.rand(2, SAMPLE_RATE * NUM_SECONDS, dtype=torch.float32)
+
+# construct the pitch shifter
+pitch_shift = PitchShifter(SAMPLE_RATE)
 
 for i in range(-12, 12 + 1):
-    print(pitch_shift(a, i))
+    print(pitch_shift(sample, i))

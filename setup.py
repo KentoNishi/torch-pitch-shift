@@ -12,14 +12,14 @@ versionName = sys.argv[1].replace("refs/tags/v", "")
 del sys.argv[1]
 
 setuptools.setup(
-    name="gpu_pitch_shift",
+    name="torch_pitch_shift",
     version=versionName,
     author="KentoNishi",
     author_email="kento24gs@outlook.com",
     description=long_description.split("\n")[1],
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/KentoNishi/gpu_pitch_shift",
+    url="https://github.com/KentoNishi/torch_pitch_shift",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

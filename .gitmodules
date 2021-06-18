@@ -1,0 +1,3 @@
+[submodule "filtering"]
+	path = torch_pitch_shift/filtering
+	url = https://github.com/KentoNishi/filtering
