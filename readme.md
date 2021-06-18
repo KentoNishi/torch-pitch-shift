@@ -2,7 +2,7 @@
 
 Pitch-shift audio clips quickly with PyTorch (CUDA Supported)!
 
-[View on PyPI](https://github.com/KentoNishi/torch_pitch_shift)
+[View on PyPI](https://pypi.org/project/torch-pitch-shift/)
 
 [![Publish to PyPI](https://github.com/KentoNishi/torch_pitch_shift/actions/workflows/publish.yaml/badge.svg)](https://github.com/KentoNishi/torch_pitch_shift/actions/workflows/publish.yaml)
 
