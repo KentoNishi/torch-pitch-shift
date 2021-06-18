@@ -3,7 +3,7 @@ import torch
 from torch_pitch_shift import *
 
 # create a random sample
-SAMPLE_RATE = 16000
+SAMPLE_RATE = 44100
 NUM_SECONDS = 2
 sample = torch.rand(2, SAMPLE_RATE * NUM_SECONDS)
 
