@@ -5,7 +5,7 @@ import torchaudio.transforms as T
 from numpy import isin
 import torch
 from torch.nn.functional import interpolate
-from typing import Tuple, Callable
+from typing import Callable
 from primePy import primes
 from functools import reduce
 from fractions import Fraction
