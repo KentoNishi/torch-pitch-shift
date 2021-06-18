@@ -38,19 +38,19 @@ class PitchShifter:
     def __init__(self, sample_rate: int, condition: Callable):
         """
         PitchShifter constructor.
-        Shift the pitch of a waveform
+        Shift the pitch of a waveform by a given ratio.
 
         Parameters
         ----------
         sample_rate: int
-            sample rate of input audio clips
+            Sample rate of input audio clips
         condition: Callable
-            a function to determine if a ratio is valid.
+            A function to determine if a ratio is valid.
             Example: ``lambda x: (x <= 2 and x >= 0.5)``
         """
         self._sample_rate = sample_rate
         self._resamplers = []
-        self.fast_ratios = set()
+        self.fast_shifts = set()
         self._bins_per_octave = 12
         factors = primes.factors(sample_rate)
         products = []
@@ -65,22 +65,21 @@ class PitchShifter:
             for j in products:
                 f = Fraction(i, j)
                 if condition(f):
-                    self.fast_ratios.add(f)
+                    self.fast_shifts.add(f)
 
     def __call__(self, input: torch.Tensor, shift: Fraction):
         """
-
         Parameters
         ----------
         input: torch.Tensor [shape=(channels, samples)]
-            Input samples of shape (channels, samples)
+            Input audio clip of shape (channels, samples)
         shift: Fraction
-            For ratios: you can retrieve ratios that can be calculated quickly by accessing ``.fast_ratios``.
+            You can retrieve ratios that can be calculated quickly by accessing ``.fast_shifts``.
 
         Returns
         -------
         output: torch.Tensor [shape=(channels, samples)]
-            The pitch-shifted batch of audio clips
+            The pitch-shifted audio clip
         """
         shift = (shift.numerator, shift.denominator)
         resampler = T.Resample(
