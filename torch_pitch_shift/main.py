@@ -67,7 +67,7 @@ class PitchShifter:
                 if condition(f):
                     self.fast_shifts.add(f)
 
-    def __call__(self, input: torch.Tensor, shift: Fraction):
+    def __call__(self, input: torch.Tensor, shift: Fraction) -> torch.Tensor:
         """
         Parameters
         ----------
