@@ -1,8 +1,4 @@
-# Based on the librosa implementation of pitch shifting.
-# https://github.com/librosa/librosa/blob/1468db6d95b276f426935966102f05b86fcc499c/librosa/effects.py#L260
-
 import torchaudio.transforms as T
-from numpy import isin
 import torch
 from torch.nn.functional import interpolate
 from typing import Callable
