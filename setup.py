@@ -22,6 +22,7 @@ setuptools.setup(
     url="https://github.com/KentoNishi/torch_pitch_shift",
     packages=setuptools.find_packages(),
     include_package_data=True,
+    package_data={"torch_pitch_shift": ["filtering/*/*.py"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
