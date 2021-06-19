@@ -9,7 +9,7 @@ Pitch-shift audio clips quickly with PyTorch (CUDA supported)! Additional utilit
 ## About
 
 This package includes two main features:
-* Pitch-shift audio clips quickly to using PyTorch (with CUDA support)
+* Pitch-shift audio clips quickly using PyTorch (with CUDA support)
 * Calculate efficient pitch-shift targets (useful for augmentation, where speed is more important than precise pitch-shifts)
 
 ## Installation
