@@ -5,7 +5,7 @@ from torch_pitch_shift import *
 
 SAMPLE_RATE, sample = wavfile.read("./wavs/test.wav")
 dtype = sample.dtype
-sample = torch.tensor(np.swapaxes(sample, 0, 1), dtype=torch.float32)
+sample = torch.tensor(np.swapaxes(sample, 0, 1), dtype=torch.float32).cuda()
 
 pitch_shift = PitchShifter()
 

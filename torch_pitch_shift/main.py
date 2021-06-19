@@ -4,10 +4,7 @@ import torch
 
 
 class PitchShifter:
-    def __init__(
-        self,
-        n_fft: int = 256,
-    ):
+    def __init__(self, n_fft: int = 256, bins_per_octave: int = 12):
         """
         PitchShifter constructor.
         Shift the pitch of a waveform by a given ratio.
@@ -16,8 +13,11 @@ class PitchShifter:
         ----------
         n_fft: int [optional]
             Size of FFT. Default 256. Smaller is faster.
+        bins_per_octave: int [optional]
+            Number of bins per octave. Default is 12.
         """
         self._n_fft = n_fft
+        self._bins_per_octave = bins_per_octave
 
     def __call__(
         self, input: torch.Tensor, shift: number, sample_rate: int
@@ -27,8 +27,9 @@ class PitchShifter:
         ----------
         input: torch.Tensor [shape=(channels, samples)]
             Input audio clip of shape (channels, samples)
-        shift: float
-            Amount to pitch-shift in semitones.
+        shift: number
+            Amount to pitch-shift in # of bins.
+            1 bin is 1 semitone if ``bins_per_octave`` is 12.
         sample_rate: int
 
         Returns
@@ -36,7 +37,7 @@ class PitchShifter:
         output: torch.Tensor [shape=(channels, samples)]
             The pitch-shifted audio clip
         """
-        shift = 2.0 ** (float(shift) / 12)
+        shift = 2.0 ** (float(shift) / self._bins_per_octave)
         resampler = T.Resample(sample_rate, int(sample_rate / shift))
         output = input
         output = resampler(output)
