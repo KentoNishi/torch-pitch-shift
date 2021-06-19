@@ -3,6 +3,7 @@ from fractions import Fraction
 from functools import reduce
 from itertools import chain, count, islice, repeat
 from typing import Union
+from torch.nn.functional import pad
 import torch
 import torchaudio.transforms as T
 from primePy import primes
@@ -98,4 +99,6 @@ class PitchShifter:
         ).to(input.device)
         output = stretcher(output)
         output = torch.istft(output[0], self._n_fft)
-        return output
+        if output.shape[1] >= input.shape[1]:
+            return output[:, : (input.shape[1])]
+        return pad(output, pad=(0, 0, 0, input.shape[1] - output.shape[1]))
