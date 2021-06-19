@@ -1,6 +1,6 @@
 # Torch Pitch Shift
 
-Pitch-shift audio clips quickly with PyTorch (CUDA supported), with additional utilities to search for efficient pitch-shift transformations!
+Pitch-shift audio clips quickly with PyTorch (CUDA supported)! Additional utilities for searching efficient transformations are included.
 
 [View on PyPI](https://pypi.org/project/torch-pitch-shift/)
 
