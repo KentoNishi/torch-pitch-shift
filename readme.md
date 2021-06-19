@@ -8,7 +8,7 @@ Pitch-shift audio clips quickly with PyTorch (CUDA Supported)!
 
 ## About
 
-This library can pitch-shift audio clips quickly to using PyTorch. For any given sample rate, the library calculates pitch-shift ratios that can be run extremely fast.
+This library can pitch-shift audio clips quickly to using PyTorch.
 
 ## Installation
 ```bash
