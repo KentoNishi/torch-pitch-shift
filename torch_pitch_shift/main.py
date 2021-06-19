@@ -1,7 +1,7 @@
 import torchaudio.transforms as T
 import torch
 from torch.nn.functional import interpolate
-from typing import Callable
+from typing import Callable, Union
 from primePy import primes
 from functools import reduce
 from fractions import Fraction
@@ -31,7 +31,13 @@ def combinations_without_repetition(r, iterable=None, values=None, counts=None):
 
 
 class PitchShifter:
-    def __init__(self, sample_rate: int, condition: Callable):
+    def __init__(
+        self,
+        sample_rate: int,
+        condition: Callable,
+        generate_fast_shifts: bool = True,
+        n_fft: int = 256,
+    ):
         """
         PitchShifter constructor.
         Shift the pitch of a waveform by a given ratio.
@@ -43,11 +49,15 @@ class PitchShifter:
         condition: Callable
             A function to determine if a ratio is valid.
             Example: ``lambda x: (x <= 2 and x >= 0.5)``
+        generate_fast_shifts: bool [optional]
+            Whether or not to generate ``fast_shifts``. Default `True`.
+        n_fft: int [optional]
+            Size of FFT. Default 256. Smaller is faster.
         """
+        self._n_fft = n_fft
         self._sample_rate = sample_rate
         self._resamplers = []
         self.fast_shifts = set()
-        self._bins_per_octave = 12
         factors = primes.factors(sample_rate)
         products = []
         for i in range(1, len(factors) + 1):
@@ -63,13 +73,15 @@ class PitchShifter:
                 if condition(f):
                     self.fast_shifts.add(f)
 
-    def __call__(self, input: torch.Tensor, shift: Fraction) -> torch.Tensor:
+    def __call__(
+        self, input: torch.Tensor, shift: Union[Fraction, float]
+    ) -> torch.Tensor:
         """
         Parameters
         ----------
         input: torch.Tensor [shape=(channels, samples)]
             Input audio clip of shape (channels, samples)
-        shift: Fraction
+        shift: Union[Fraction, float]
             You can retrieve ratios that can be calculated quickly by accessing ``.fast_shifts``.
 
         Returns
@@ -77,14 +89,17 @@ class PitchShifter:
         output: torch.Tensor [shape=(channels, samples)]
             The pitch-shifted audio clip
         """
-        shift = (shift.numerator, shift.denominator)
+        # max_magnitude = torch.max(torch.abs(input))
+        frac = Fraction(shift)
+        shift = (frac.numerator, frac.denominator)
         resampler = T.Resample(
-            self._sample_rate, int(self._sample_rate * shift[0] / shift[1])
+            self._sample_rate, int(self._sample_rate * shift[1] / shift[0])
         )
-        output = interpolate(
-            input[None, ...],
-            size=int(input.shape[1] * shift[1] / shift[0]),
-        )
+        output = torch.stft(input, self._n_fft)[None, ...]
+        stretcher = T.TimeStretch(fixed_rate=float(1 / frac), n_freq=output.shape[2])
+        output = stretcher(output)
+        output = torch.istft(output[0], self._n_fft)
         output = resampler(output)
-        output = output[0]
+        # new_max_magnitude = torch.max(torch.abs(output))
+        # output *= max_magnitude / new_max_magnitude
         return output
