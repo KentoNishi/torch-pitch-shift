@@ -1,2 +1,2 @@
 torch>=1.7.0
-primePy
+torchaudio>=0.7.0
