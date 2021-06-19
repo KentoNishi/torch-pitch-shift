@@ -5,18 +5,22 @@ from torch_pitch_shift import *
 
 SAMPLE_RATE, sample = wavfile.read("./wavs/test.wav")
 dtype = sample.dtype
-sample = torch.tensor(np.swapaxes(sample, 0, 1), dtype=torch.float32).cuda()
+sample = torch.tensor(
+    np.swapaxes(sample, 0, 1),
+    dtype=torch.float32,
+    device="cuda" if torch.cuda.is_available() else "cpu",
+)
 
 pitch_shift = PitchShifter()
 
-up = pitch_shift(sample, 12, SAMPLE_RATE)
+up = pitch_shift(sample, 12, SAMPLE_RATE).cpu()
 wavfile.write(
     "./wavs/test_+1.wav",
     SAMPLE_RATE,
     np.swapaxes(up.numpy(), 0, 1).astype(dtype),
 )
 
-down = pitch_shift(sample, -12, SAMPLE_RATE)
+down = pitch_shift(sample, -12, SAMPLE_RATE).cpu()
 wavfile.write(
     "./wavs/test_-1.wav",
     SAMPLE_RATE,

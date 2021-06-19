@@ -38,11 +38,13 @@ class PitchShifter:
             The pitch-shifted audio clip
         """
         shift = 2.0 ** (float(shift) / self._bins_per_octave)
-        resampler = T.Resample(sample_rate, int(sample_rate / shift))
+        resampler = T.Resample(sample_rate, int(sample_rate / shift)).to(input.device)
         output = input
         output = resampler(output)
         output = torch.stft(output, self._n_fft)[None, ...]
-        stretcher = T.TimeStretch(fixed_rate=float(1 / shift), n_freq=output.shape[2])
+        stretcher = T.TimeStretch(
+            fixed_rate=float(1 / shift), n_freq=output.shape[2]
+        ).to(input.device)
         output = stretcher(output)
         output = torch.istft(output[0], self._n_fft)
         return output
