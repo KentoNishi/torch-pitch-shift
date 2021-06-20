@@ -79,7 +79,7 @@ class PitchShifter:
             Input audio clip of shape (channels, samples)
         shift: float OR Fraction
             float: Amount to pitch-shift in # of bins. (1 bin == 1 semitone if ``bins_per_octave`` == 12)
-            Fraction: A `fractions.Fraction` object indicating the shift ratio. Usually an element in ``.fast_ratios``.
+            Fraction: A `fractions.Fraction` object indicating the shift ratio. Usually an element in ``get_fast_shifts()``.
 
         sample_rate: int
 
