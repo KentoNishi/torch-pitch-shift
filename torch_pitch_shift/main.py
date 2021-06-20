@@ -2,7 +2,7 @@ from collections import Counter
 from fractions import Fraction
 from functools import reduce
 from itertools import chain, count, islice, repeat
-from typing import Union
+from typing import Union, Callable
 from torch.nn.functional import pad
 import torch
 import torchaudio.transforms as T
@@ -33,7 +33,20 @@ def _combinations_without_repetition(r, iterable=None, values=None, counts=None)
             indices[i] = j
 
 
-def get_fast_shifts(sample_rate, condition):
+def get_fast_shifts(
+    sample_rate: int, condition: Callable = lambda x: x >= 0.5 and x <= 2 and x != 1
+):
+    """
+    Search for pitch-shift targets that can be computed quickly for a given sample rate.
+
+    Parameters
+    ----------
+    sample_rate: int
+        The sample rate of an audio clip.
+    condition: Callable [optional]
+        A function to validate fast shift ratios.
+        Default is `lambda x: x >= 0.5 and x <= 2 and x != 1` (between -1 and +1 octaves).
+    """
     fast_shifts = set()
     factors = primes.factors(sample_rate)
     products = []
@@ -78,8 +91,10 @@ class PitchShifter:
         input: torch.Tensor [shape=(channels, samples)]
             Input audio clip of shape (channels, samples)
         shift: float OR Fraction
-            float: Amount to pitch-shift in # of bins. (1 bin == 1 semitone if ``bins_per_octave`` == 12)
-            Fraction: A `fractions.Fraction` object indicating the shift ratio. Usually an element in ``get_fast_shifts()``.
+            `float`: Amount to pitch-shift in # of bins. (1 bin == 1 semitone if `bins_per_octave` == 12)
+            `Fraction`: A `fractions.Fraction` object indicating the shift ratio. Usually an element in `get_fast_shifts()`.
+        sample_rate: int
+            The sample rate of the input audio clip.
 
         sample_rate: int
 
