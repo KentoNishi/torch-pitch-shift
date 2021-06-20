@@ -6,10 +6,10 @@ from torch_pitch_shift import *
 # read an audio file
 SAMPLE_RATE, sample = wavfile.read("./wavs/test.wav")
 
-# convert to tensor
+# convert to tensor of shape (channels, samples)
 dtype = sample.dtype
 sample = torch.tensor(
-    np.swapaxes(sample, 0, 1),
+    np.swapaxes(sample, 0, 1),  # (samples, channels) --> (channels, samples)
     dtype=torch.float32,
     device="cuda" if torch.cuda.is_available() else "cpu",
 )
@@ -34,7 +34,7 @@ wavfile.write(
 )
 
 # get shift ratios that are fast (between +1 and -1 octaves)
-for ratio in get_fast_shifts(SAMPLE_RATE, lambda x: x >= 0.5 and x <= 2):
+for ratio in get_fast_shifts(SAMPLE_RATE):
     print("Shifting", ratio)
     wavfile.write(
         f"./wavs/shifted_ratio_{ratio.numerator}-{ratio.denominator}.wav",
