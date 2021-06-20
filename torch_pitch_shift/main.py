@@ -12,7 +12,7 @@ import warnings
 warnings.simplefilter("ignore")
 
 # https://stackoverflow.com/a/46623112/9325832
-def combinations_without_repetition(r, iterable=None, values=None, counts=None):
+def _combinations_without_repetition(r, iterable=None, values=None, counts=None):
     if iterable:
         values, counts = zip(*Counter(iterable).items())
 
@@ -41,7 +41,7 @@ def get_fast_shifts(sample_rate, condition):
         products.extend(
             [
                 reduce(lambda x, y: x * y, x)
-                for x in combinations_without_repetition(i, iterable=factors)
+                for x in _combinations_without_repetition(i, iterable=factors)
             ]
         )
     for i in products:
