@@ -1,0 +1,8 @@
+site_name: Torch Pitch Shift Docs
+site_url: https://kentonishi.github.io/torch-pitch-shift/
+nav:
+  - About: index.md
+  - Usage: usage.md
+theme: readthedocs
+extra_css:
+  - index.css

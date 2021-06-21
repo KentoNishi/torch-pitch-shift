@@ -19,10 +19,9 @@ setuptools.setup(
     description=long_description.split("\n")[1],
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/KentoNishi/torch_pitch_shift",
+    url="https://github.com/KentoNishi/torch-pitch-shift",
     packages=setuptools.find_packages(),
     include_package_data=True,
-    # package_data={"torch_pitch_shift": ["filtering/*/*.py"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

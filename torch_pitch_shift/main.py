@@ -92,7 +92,7 @@ def pitch_shift(
     Returns
     -------
     output: torch.Tensor [shape=(batch_size, channels, samples)]
-        The pitch-shifted batch of audio clip
+        The pitch-shifted batch of audio clips
     """
     batch_size, channels, samples = input.shape
     if not isinstance(shift, Fraction):
