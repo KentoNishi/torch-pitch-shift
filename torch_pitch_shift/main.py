@@ -114,6 +114,7 @@ class PitchShifter:
         ).to(input.device)
         output = stretcher(output)
         output = torch.istft(output[0], self._n_fft)
+        del resampler, stretcher
         if output.shape[1] >= input.shape[1]:
             return output[:, : (input.shape[1])]
         return pad(output, pad=(0, input.shape[1] - output.shape[1], 0, 0))
