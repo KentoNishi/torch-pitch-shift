@@ -65,56 +65,53 @@ def get_fast_shifts(
     return list(fast_shifts)
 
 
-class PitchShifter:
-    def __init__(self, n_fft: int = 256, bins_per_octave: int = 12):
-        """
-        PitchShifter constructor.
+def pitch_shift(
+    input: torch.Tensor,
+    shift: Union[float, Fraction],
+    sample_rate: int,
+    n_fft: int = 256,
+    bins_per_octave: int = 12,
+) -> torch.Tensor:
+    """
+    Shift the pitch of a batch of waveforms by a given amount.
 
-        Parameters
-        ----------
-        n_fft: int [optional]
-            Size of FFT. Default 256. Smaller is faster.
-        bins_per_octave: int [optional]
-            Number of bins per octave. Default is 12.
-        """
-        self._n_fft = n_fft
-        self._bins_per_octave = bins_per_octave
+    Parameters
+    ----------
+    input: torch.Tensor [shape=(batch_size, channels, samples)]
+        Input audio clips of shape (batch_size, channels, samples)
+    shift: float OR Fraction
+        `float`: Amount to pitch-shift in # of bins. (1 bin == 1 semitone if `bins_per_octave` == 12)
+        `Fraction`: A `fractions.Fraction` object indicating the shift ratio. Usually an element in `get_fast_shifts()`.
+    sample_rate: int
+        The sample rate of the input audio clips.
+    n_fft: int [optional]
+        Size of FFT. Default 256. Smaller is faster.
+    bins_per_octave: int [optional]
+        Number of bins per octave. Default is 12.
 
-    def __call__(
-        self, input: torch.Tensor, shift: Union[float, Fraction], sample_rate: int
-    ) -> torch.Tensor:
-        """
-        Shift the pitch of a waveform by a given amount.
+    Returns
+    -------
+    output: torch.Tensor [shape=(batch_size, channels, samples)]
+        The pitch-shifted batch of audio clip
+    """
+    batch_size, channels, samples = input.shape
+    if not isinstance(shift, Fraction):
+        shift = 2.0 ** (float(shift) / bins_per_octave)
+    resampler = T.Resample(sample_rate, int(sample_rate / shift)).to(input.device)
+    output = input
+    output = output.reshape(batch_size * channels, samples)
+    output = resampler(output)
+    output = torch.stft(output, n_fft)[None, ...]
+    stretcher = T.TimeStretch(fixed_rate=float(1 / shift), n_freq=output.shape[2]).to(
+        input.device
+    )
+    output = stretcher(output)
+    output = torch.istft(output[0], n_fft)
+    del resampler, stretcher
+    if output.shape[1] >= input.shape[2]:
+        output = output[:, : (input.shape[2])]
+    else:
+        output = pad(output, pad=(0, input.shape[2] - output.shape[1], 0, 0))
 
-        Parameters
-        ----------
-        input: torch.Tensor [shape=(channels, samples)]
-            Input audio clip of shape (channels, samples)
-        shift: float OR Fraction
-            `float`: Amount to pitch-shift in # of bins. (1 bin == 1 semitone if `bins_per_octave` == 12)
-            `Fraction`: A `fractions.Fraction` object indicating the shift ratio. Usually an element in `get_fast_shifts()`.
-        sample_rate: int
-            The sample rate of the input audio clip.
-
-        sample_rate: int
-
-        Returns
-        -------
-        output: torch.Tensor [shape=(channels, samples)]
-            The pitch-shifted audio clip
-        """
-        if not isinstance(shift, Fraction):
-            shift = 2.0 ** (float(shift) / self._bins_per_octave)
-        resampler = T.Resample(sample_rate, int(sample_rate / shift)).to(input.device)
-        output = input
-        output = resampler(output)
-        output = torch.stft(output, self._n_fft)[None, ...]
-        stretcher = T.TimeStretch(
-            fixed_rate=float(1 / shift), n_freq=output.shape[2]
-        ).to(input.device)
-        output = stretcher(output)
-        output = torch.istft(output[0], self._n_fft)
-        del resampler, stretcher
-        if output.shape[1] >= input.shape[1]:
-            return output[:, : (input.shape[1])]
-        return pad(output, pad=(0, input.shape[1] - output.shape[1], 0, 0))
+    output = output.reshape(batch_size, channels, samples)
+    return output
