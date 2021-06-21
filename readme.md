@@ -52,7 +52,7 @@ for ratio in get_fast_shifts(SAMPLE_RATE):
 Check out [example.py](https://github.com/KentoNishi/torch_pitch_shift/blob/master/example.py) to see `torch_pitch_shift` a more detailed example!
 
 ## Documentation
-See the [GitHub Wiki Page](https://github.com/KentoNishi/torch_pitch_shift/wiki) for detailed documentation!
+See the [GitHub Wiki Page](https://github.com/KentoNishi/torch_pitch_shift/wiki/3.-Documentation) for detailed documentation!
 
 ## Contributing
 Please feel free to submit issues or pull requests!
