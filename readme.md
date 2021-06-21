@@ -24,6 +24,31 @@ pip install torch_pitch_shift
 ## Usage
 
 ### Example
+
+It's super simple:
+```python
+# import libraries
+import torch
+from torch_pitch_shift import *
+
+# specify the sample rate
+SAMPLE_RATE = 16000
+# create a random stereo audio clip (1s long)
+audio = torch.rand(
+    2,
+    SAMPLE_RATE,
+    device="cuda" if torch.cuda.is_available() else "cpu"
+)
+# create the pitch shifter
+pitch_shift = PitchShifter()
+
+# for fast shift targets between -1 and +1 octaves
+for ratio in get_fast_shifts(SAMPLE_RATE):
+    # shift the audio clip
+    shifted = pitch_shift(audio, ratio, SAMPLE_RATE)
+    print(f"Pitch shift ({ratio}):", shifted)
+```
+
 Check out [example.py](https://github.com/KentoNishi/torch_pitch_shift/blob/master/example.py) to see `torch_pitch_shift` in action!
 
 ## Documentation
