@@ -2,7 +2,7 @@
 
 Welcome to the `torch-pitch-shift` documentation!
 
-[View on PyPI](https://pypi.org/project/torch-pitch-shift/) / [View on GitHub](https://github.com/torch-pitch-shift)
+[View on PyPI](https://pypi.org/project/torch-pitch-shift/) / [View on GitHub](https://github.com/KentoNishi/torch-pitch-shift)
 
 ## What is `torch-pitch-shift`?
 
