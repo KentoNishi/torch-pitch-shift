@@ -31,7 +31,15 @@ jobs:
         echo Running in $PWD
         python setup.py ${{ github.ref }} sdist bdist_wheel
         twine upload dist/*
-    - name: Deploy docs
-      uses: mhausenblas/mkdocs-deploy-gh-pages@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build docs
+      run: |
+        mkdocs build
+        git add .
+        mv site ../site
+        git checkout gh-pages
+        mv ../site/* .
+    - name: Deploy Docs
+      uses: EndBug/add-and-commit@v7
+      with:
+        message: 'Updated documentation'
+        add: "."
