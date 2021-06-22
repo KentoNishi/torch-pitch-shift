@@ -37,10 +37,10 @@ jobs:
         cp -r site ../site
         git fetch --all
         git checkout gh-pages
-        git branch -u origin/gh-pages gh-pages
         cp -r ../site/* .
     - name: Deploy Docs
       uses: EndBug/add-and-commit@v7
       with:
         message: 'Updated documentation'
         add: "."
+        branch: gh-pages
