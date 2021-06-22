@@ -73,11 +73,11 @@ Shift the pitch of a batch of waveforms by a given amount.
       <td>Yes</td>
       <td></td>
 <td><pre><code>torch.Tensor [
-  shape=(
-    batch_size,
-    channels,
-    samples
-  )
+    shape=(
+        batch_size,
+        channels,
+        samples
+    )
 ]</code></pre></td>
       <td>Input audio clips of shape (batch_size, channels, samples)</td>
     </tr>
@@ -85,7 +85,7 @@ Shift the pitch of a batch of waveforms by a given amount.
       <td><code>shift</code></td>
       <td>Yes</td>
       <td></td>
-      <td><code>float</code> OR <code>Fraction</code></td>
+      <td><code>float</code> or <code>Fraction</code></td>
       <td>Inputs of type <code>float</code> indicate the amount to pitch-shift in # of bins (where 1 bin == 1 semitone if <code>bins_per_octave</code> == 12). Inputs of type <code>Fraction</code> indicate a pitch-shift ratio (usually an element in <code>get_fast_shifts()</code>).</td>
     </tr>
     <tr>
@@ -124,11 +124,11 @@ Shift the pitch of a batch of waveforms by a given amount.
   <tbody>
     <tr>
 <td><pre><code>torch.Tensor [
-  shape=(
-    batch_size,
-    channels,
-    samples
-  )
+    shape=(
+        batch_size,
+        channels,
+        samples
+    )
 ]</code></pre></td>
       <td>The pitch-shifted batch of audio clips</td>
     </tr>
@@ -161,11 +161,27 @@ Search for pitch-shift targets that can be computed quickly for a given sample r
       <td>No</td>
       <td>
 <pre><code>lambda x: (
-  x &gt;= 0.5 and x &lt;= 2 and x != 1
+    x &gt;= 0.5 and x &lt;= 2 and x != 1
 )</code></pre>
       </td>
       <td><code>Callable</code></td>
       <td>A function to validate fast shift ratios. Default value limits computed targets to values between <code>-1</code> and <code>+1</code> octaves.</td>
+    </tr>
+  </tbody>
+</table>
+#### Return value
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>List[Fraction]</code></td>
+      <td>A list of fast pitch-shift target ratios that satisfy the given conditions.</td>
     </tr>
   </tbody>
 </table>
