@@ -1,0 +1,8 @@
+setup.py
+torch_pitch_shift/__init__.py
+torch_pitch_shift/main.py
+torch_pitch_shift.egg-info/PKG-INFO
+torch_pitch_shift.egg-info/SOURCES.txt
+torch_pitch_shift.egg-info/dependency_links.txt
+torch_pitch_shift.egg-info/requires.txt
+torch_pitch_shift.egg-info/top_level.txt

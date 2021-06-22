@@ -1,0 +1,3 @@
+torch>=1.7.0
+torchaudio>=0.7.0
+primePy>=1.3
