@@ -34,7 +34,7 @@ jobs:
     - name: Build docs
       run: |
         mkdocs build
-        mv site ../site
+        cp -r site ../site
         git fetch --all
         git checkout gh-pages
         mv ../site/* .
