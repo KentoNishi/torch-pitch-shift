@@ -76,6 +76,18 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#semitones_to_ratio">semitones_to_ratio</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#return-value_2">Return value</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#ratio_to_semitones">ratio_to_semitones</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#return-value_3">Return value</a>
+    </li>
+        </ul>
+    </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#example">Example</a>
@@ -270,6 +282,7 @@ from torch_pitch_shift import get_fast_shifts, pitch_shift
     </tr>
   </tbody>
 </table>
+
 <h4 id="return-value_1">Return value</h4>
 <table>
   <thead>
@@ -282,6 +295,84 @@ from torch_pitch_shift import get_fast_shifts, pitch_shift
     <tr>
       <td><code>List[Fraction]</code></td>
       <td>A list of fast pitch-shift target ratios that satisfy the given conditions.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="semitones_to_ratio"><code>semitones_to_ratio</code></h3>
+<p>Convert semitonal shifts into ratios.</p>
+<table>
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th>Required</th>
+      <th>Default Value</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>semitones</code></td>
+      <td>Yes</td>
+      <td></td>
+      <td><code>float</code></td>
+      <td>The number of semitones for a desired shift.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="return-value_2">Return value</h4>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Fraction</code></td>
+      <td>A Fraction indicating a pitch shift ratio</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="ratio_to_semitones"><code>ratio_to_semitones</code></h3>
+<p>Convert rational shifts to semitones.</p>
+<table>
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th>Required</th>
+      <th>Default Value</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ratio</code></td>
+      <td>Yes</td>
+      <td></td>
+      <td><code>Fraction</code></td>
+      <td>The ratio for a desired shift.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="return-value_3">Return value</h4>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>float</code></td>
+      <td>The magnitude of a pitch shift in semitones</td>
     </tr>
   </tbody>
 </table>
