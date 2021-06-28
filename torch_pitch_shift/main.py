@@ -2,11 +2,12 @@ from collections import Counter
 from fractions import Fraction
 from functools import reduce
 from itertools import chain, count, islice, repeat
-from typing import Union, Callable
+from typing import Union, Callable, List
 from torch.nn.functional import pad
 import torch
 import torchaudio.transforms as T
 from primePy import primes
+from math import log2
 import warnings
 
 warnings.simplefilter("ignore")
@@ -35,7 +36,7 @@ def _combinations_without_repetition(r, iterable=None, values=None, counts=None)
 
 def get_fast_shifts(
     sample_rate: int, condition: Callable = lambda x: x >= 0.5 and x <= 2 and x != 1
-):
+) -> List[Fraction]:
     """
     Search for pitch-shift targets that can be computed quickly for a given sample rate.
 
@@ -46,6 +47,11 @@ def get_fast_shifts(
     condition: Callable [optional]
         A function to validate fast shift ratios.
         Default is `lambda x: x >= 0.5 and x <= 2 and x != 1` (between -1 and +1 octaves).
+
+    Returns
+    -------
+    output: List[Fraction]
+        A list of fast pitch-shift target ratios
     """
     fast_shifts = set()
     factors = primes.factors(sample_rate)
@@ -63,6 +69,40 @@ def get_fast_shifts(
             if condition(f):
                 fast_shifts.add(f)
     return list(fast_shifts)
+
+
+def semitones_to_ratio(semitones: float) -> Fraction:
+    """
+    Convert semitonal shifts into ratios.
+
+    Parameters
+    ----------
+    semitones: float
+        The number of semitones for a desired shift.
+
+    Returns
+    -------
+    output: Fraction
+        A Fraction indicating a pitch shift ratio
+    """
+    return Fraction(2.0 ** (semitones / 12.0))
+
+
+def ratio_to_semitones(ratio: Fraction) -> float:
+    """
+    Convert rational shifts to semitones.
+
+    Parameters
+    ----------
+    ratio: Fraction
+        The ratio for a desired shift.
+
+    Returns
+    -------
+    output: float
+        The magnitude of a pitch shift in semitones
+    """
+    return float(12.0 * log2(ratio))
 
 
 def pitch_shift(

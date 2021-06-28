@@ -169,6 +169,7 @@ Search for pitch-shift targets that can be computed quickly for a given sample r
     </tr>
   </tbody>
 </table>
+
 #### Return value
 
 <table>
@@ -182,6 +183,88 @@ Search for pitch-shift targets that can be computed quickly for a given sample r
     <tr>
       <td><code>List[Fraction]</code></td>
       <td>A list of fast pitch-shift target ratios that satisfy the given conditions.</td>
+    </tr>
+  </tbody>
+</table>
+
+### `semitones_to_ratio`
+Convert semitonal shifts into ratios.
+
+<table>
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th>Required</th>
+      <th>Default Value</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>semitones</code></td>
+      <td>Yes</td>
+      <td></td>
+      <td><code>float</code></td>
+      <td>The number of semitones for a desired shift.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Return value
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Fraction</code></td>
+      <td>A Fraction indicating a pitch shift ratio</td>
+    </tr>
+  </tbody>
+</table>
+
+### `ratio_to_semitones`
+Convert rational shifts to semitones.
+
+<table>
+  <thead>
+    <tr>
+      <th>Argument</th>
+      <th>Required</th>
+      <th>Default Value</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ratio</code></td>
+      <td>Yes</td>
+      <td></td>
+      <td><code>Fraction</code></td>
+      <td>The ratio for a desired shift.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Return value
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>float</code></td>
+      <td>The magnitude of a pitch shift in semitones</td>
     </tr>
   </tbody>
 </table>
