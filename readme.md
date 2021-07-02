@@ -19,7 +19,7 @@ This package includes two main features:
 
 ## Installation
 ```bash
-pip install torch_pitch_shift
+pip install torch-pitch-shift
 ```
 
 ## Usage
