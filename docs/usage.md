@@ -98,7 +98,7 @@ Shift the pitch of a batch of waveforms by a given amount.
     <tr>
       <td><code>n_fft</code></td>
       <td>No</td>
-      <td><code>256</code></td>
+      <td><code>sample_rate // 64</code></td>
       <td><code>int</code></td>
       <td>Size of FFT. Default <code>sample_rate // 64</code>. Smaller is faster.</td>
     </tr>
