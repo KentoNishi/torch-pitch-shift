@@ -6,7 +6,7 @@ from torch_pitch_shift import *
 # read an audio file
 SAMPLE_RATE, sample = wavfile.read("./wavs/test.wav")
 
-# convert to tensor of shape (channels, samples)
+# convert to tensor of shape (batch_size, channels, samples)
 dtype = sample.dtype
 sample = torch.tensor(
     [np.swapaxes(sample, 0, 1)],  # (samples, channels) --> (channels, samples)
