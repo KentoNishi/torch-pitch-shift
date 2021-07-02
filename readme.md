@@ -26,7 +26,7 @@ pip install torch_pitch_shift
 
 ### Example
 
-Check out [example.py](https://github.com/KentoNishi/torch-pitch-shift/blob/master/example.py) to see `torch_pitch_shift` in action!
+Check out [example.py](https://github.com/KentoNishi/torch-pitch-shift/blob/master/example.py) to see `torch-pitch-shift` in action!
 
 ## Documentation
 See the [documentation page](https://kentonishi.github.io/torch-pitch-shift/) for detailed documentation!
