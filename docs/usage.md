@@ -39,13 +39,23 @@ from torch_pitch_shift import get_fast_shifts, pitch_shift
   <tbody>
     <tr>
       <td>Function</td>
+      <td><code>pitch_shift</code></td>
+      <td>Shift the pitch of a batch of waveforms by a given amount.</td>
+    </tr>
+    <tr>
+      <td>Function</td>
       <td><code>get_fast_shifts</code></td>
       <td>Utility function for calculating pitch-shifts that can be executed quickly.</td>
     </tr>
     <tr>
       <td>Function</td>
-      <td><code>pitch_shift</code></td>
-      <td>Shift the pitch of a batch of waveforms by a given amount.</td>
+      <td><code>semitones_to_ratio</code></td>
+      <td>Utility function to convert semitonal shifts into ratios.</td>
+    </tr>
+    <tr>
+      <td>Function</td>
+      <td><code>ratio_to_semitones</code></td>
+      <td>Utility function to convert rational shifts to semitones.</td>
     </tr>
   </tbody>
 </table>
@@ -98,7 +108,7 @@ Shift the pitch of a batch of waveforms by a given amount.
     <tr>
       <td><code>n_fft</code></td>
       <td>No</td>
-      <td><code>256</code></td>
+      <td><code>sample_rate // 64</code></td>
       <td><code>int</code></td>
       <td>Size of FFT. Default <code>sample_rate // 64</code>. Smaller is faster.</td>
     </tr>
