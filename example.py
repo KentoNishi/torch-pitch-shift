@@ -15,7 +15,7 @@ sample = torch.tensor(
 )
 
 
-def pitch_shift_12_up():
+def test_pitch_shift_12_up():
     # pitch up by 12 semitones
     up = pitch_shift(sample, 12, SAMPLE_RATE)
     assert up.shape == sample.shape
@@ -26,7 +26,7 @@ def pitch_shift_12_up():
     )
 
 
-def pitch_shift_12_down():
+def test_pitch_shift_12_down():
     # pitch down by 12 semitones
     down = pitch_shift(sample, -12, SAMPLE_RATE)
     assert down.shape == sample.shape
@@ -37,7 +37,7 @@ def pitch_shift_12_down():
     )
 
 
-def pitch_shift_to_fast_ratios():
+def test_pitch_shift_to_fast_ratios():
     # get shift ratios that are fast (between +1 and -1 octaves)
     for ratio in get_fast_shifts(SAMPLE_RATE):
         print("Shifting", ratio)
