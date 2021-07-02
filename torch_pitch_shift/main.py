@@ -2,7 +2,7 @@ from collections import Counter
 from fractions import Fraction
 from functools import reduce
 from itertools import chain, count, islice, repeat
-from typing import Union, Callable, List
+from typing import Union, Callable, List, Optional
 from torch.nn.functional import pad
 import torch
 import torchaudio.transforms as T
@@ -35,7 +35,8 @@ def _combinations_without_repetition(r, iterable=None, values=None, counts=None)
 
 
 def get_fast_shifts(
-    sample_rate: int, condition: Callable = lambda x: x >= 0.5 and x <= 2 and x != 1
+    sample_rate: int,
+    condition: Optional[Callable] = lambda x: x >= 0.5 and x <= 2 and x != 1,
 ) -> List[Fraction]:
     """
     Search for pitch-shift targets that can be computed quickly for a given sample rate.
@@ -109,8 +110,8 @@ def pitch_shift(
     input: torch.Tensor,
     shift: Union[float, Fraction],
     sample_rate: int,
-    n_fft: int = 256,
-    bins_per_octave: int = 12,
+    n_fft: Optional[int] = 0,
+    bins_per_octave: Optional[int] = 12,
 ) -> torch.Tensor:
     """
     Shift the pitch of a batch of waveforms by a given amount.
@@ -125,7 +126,7 @@ def pitch_shift(
     sample_rate: int
         The sample rate of the input audio clips.
     n_fft: int [optional]
-        Size of FFT. Default 256. Smaller is faster.
+        Size of FFT. Default is `sample_rate // 64`. Smaller is faster.
     bins_per_octave: int [optional]
         Number of bins per octave. Default is 12.
 
@@ -134,6 +135,8 @@ def pitch_shift(
     output: torch.Tensor [shape=(batch_size, channels, samples)]
         The pitch-shifted batch of audio clips
     """
+    if not n_fft:
+        n_fft = sample_rate // 64
     batch_size, channels, samples = input.shape
     if not isinstance(shift, Fraction):
         shift = 2.0 ** (float(shift) / bins_per_octave)
