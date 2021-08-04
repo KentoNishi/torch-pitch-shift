@@ -143,13 +143,13 @@ def pitch_shift(
     resampler = T.Resample(sample_rate, int(sample_rate / shift)).to(input.device)
     output = input
     output = output.reshape(batch_size * channels, samples)
-    output = resampler(output)
     output = torch.stft(output, n_fft)[None, ...]
     stretcher = T.TimeStretch(fixed_rate=float(1 / shift), n_freq=output.shape[2]).to(
         input.device
     )
     output = stretcher(output)
     output = torch.istft(output[0], n_fft)
+    output = resampler(output)
     del resampler, stretcher
     if output.shape[1] >= input.shape[2]:
         output = output[:, : (input.shape[2])]
