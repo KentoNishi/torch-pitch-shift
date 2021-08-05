@@ -110,8 +110,9 @@ def pitch_shift(
     input: torch.Tensor,
     shift: Union[float, Fraction],
     sample_rate: int,
-    n_fft: Optional[int] = 0,
     bins_per_octave: Optional[int] = 12,
+    n_fft: Optional[int] = 0,
+    hop_length: Optional[int] = 0,
 ) -> torch.Tensor:
     """
     Shift the pitch of a batch of waveforms by a given amount.
@@ -125,30 +126,35 @@ def pitch_shift(
         `Fraction`: A `fractions.Fraction` object indicating the shift ratio. Usually an element in `get_fast_shifts()`.
     sample_rate: int
         The sample rate of the input audio clips.
-    n_fft: int [optional]
-        Size of FFT. Default is `sample_rate // 64`. Smaller is faster.
     bins_per_octave: int [optional]
         Number of bins per octave. Default is 12.
+    n_fft: int [optional]
+        Size of FFT. Default is `sample_rate // 64`.
+    hop_length: int [optional]
+        Size of hop length. Default is `n_fft // 32`.
 
     Returns
     -------
     output: torch.Tensor [shape=(batch_size, channels, samples)]
         The pitch-shifted batch of audio clips
     """
+
     if not n_fft:
         n_fft = sample_rate // 64
+    if not hop_length:
+        hop_length = n_fft // 32
     batch_size, channels, samples = input.shape
     if not isinstance(shift, Fraction):
         shift = 2.0 ** (float(shift) / bins_per_octave)
     resampler = T.Resample(sample_rate, int(sample_rate / shift)).to(input.device)
     output = input
     output = output.reshape(batch_size * channels, samples)
-    output = torch.stft(output, n_fft)[None, ...]
-    stretcher = T.TimeStretch(fixed_rate=float(1 / shift), n_freq=output.shape[2]).to(
-        input.device
-    )
+    output = torch.stft(output, n_fft, hop_length)[None, ...]
+    stretcher = T.TimeStretch(
+        fixed_rate=float(1 / shift), n_freq=output.shape[2], hop_length=hop_length
+    ).to(input.device)
     output = stretcher(output)
-    output = torch.istft(output[0], n_fft)
+    output = torch.istft(output[0], n_fft, hop_length)
     output = resampler(output)
     del resampler, stretcher
     if output.shape[1] >= input.shape[2]:
