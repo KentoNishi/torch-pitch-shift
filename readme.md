@@ -17,6 +17,8 @@ This package includes two main features:
 * Pitch-shift audio clips quickly using PyTorch (with CUDA support)
 * Calculate efficient pitch-shift targets (useful for augmentation, where speed is more important than precise pitch-shifts)
 
+> Also check out [torch-time-stretch](https://github.com/KentoNishi/torch-time-stretch), a sister project for time-stretching.
+
 ## Installation
 ```bash
 pip install torch-pitch-shift
