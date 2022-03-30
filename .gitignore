@@ -4,3 +4,4 @@ shifted*.wav
 *.egg-info
 build
 dist
+.venv

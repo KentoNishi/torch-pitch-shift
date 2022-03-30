@@ -1,14 +1,17 @@
+import warnings
 from collections import Counter
 from fractions import Fraction
 from functools import reduce
 from itertools import chain, count, islice, repeat
-from typing import Union, Callable, List, Optional
-from torch.nn.functional import pad
-import torch
-import torchaudio.transforms as T
-from primePy import primes
 from math import log2
-import warnings
+from typing import Callable, List, Optional, Union
+
+import torch
+import torchaudio
+import torchaudio.transforms as T
+from packaging import version
+from primePy import primes
+from torch.nn.functional import pad
 
 warnings.simplefilter("ignore")
 
@@ -149,7 +152,8 @@ def pitch_shift(
     resampler = T.Resample(sample_rate, int(sample_rate / shift)).to(input.device)
     output = input
     output = output.reshape(batch_size * channels, samples)
-    output = torch.stft(output, n_fft, hop_length, return_complex=True)[None, ...]
+    v011 = version.parse(torchaudio.__version__) >= version.parse("0.11.0")
+    output = torch.stft(output, n_fft, hop_length, return_complex=v011)[None, ...]
     stretcher = T.TimeStretch(
         fixed_rate=float(1 / shift), n_freq=output.shape[2], hop_length=hop_length
     ).to(input.device)
