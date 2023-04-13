@@ -29,7 +29,7 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
         echo Running in $PWD
-        python setup.py ${{ github.ref }} sdist bdist_wheel
+        python setup.py sdist bdist_wheel
         twine upload dist/*
     - name: Build docs
       run: |
