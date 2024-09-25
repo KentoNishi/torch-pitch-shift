@@ -8,7 +8,7 @@ with open("readme.md", "r") as f:
 with open("requirements.txt", "r") as f:
     requirements = f.read().split("\n")
 
-versionName = "1.2.4"
+versionName = "1.2.5"
 
 setuptools.setup(
     name="torch_pitch_shift",
