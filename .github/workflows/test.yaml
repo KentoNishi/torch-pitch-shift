@@ -21,7 +21,7 @@ jobs:
         run: |
           ls -a
           pytest example.py
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: WAV Files
           path: ./wavs
