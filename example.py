@@ -9,7 +9,7 @@ SAMPLE_RATE, sample = wavfile.read("./wavs/test.wav")
 # convert to tensor of shape (batch_size, channels, samples)
 dtype = sample.dtype
 sample = torch.tensor(
-    [np.swapaxes(sample, 0, 1)],  # (samples, channels) --> (channels, samples)
+    np.expand_dims(np.swapaxes(sample, 0, 1),0),  # (samples, channels) --> (channels, samples)
     dtype=torch.float32,
     device="cuda" if torch.cuda.is_available() else "cpu",
 )
