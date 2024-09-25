@@ -115,6 +115,7 @@ def pitch_shift(
     bins_per_octave: Optional[int] = 12,
     n_fft: Optional[int] = 0,
     hop_length: Optional[int] = 0,
+    window: Optional[torch.Tensor] = None,
 ) -> torch.Tensor:
     """
     Shift the pitch of a batch of waveforms by a given amount.
@@ -134,6 +135,8 @@ def pitch_shift(
         Size of FFT. Default is `sample_rate // 64`.
     hop_length: int [optional]
         Size of hop length. Default is `n_fft // 32`.
+    window: torch.Tensor [optional]
+        A window tensor for the STFT. Default is a tensor of ones.
 
     Returns
     -------
@@ -145,6 +148,9 @@ def pitch_shift(
         n_fft = sample_rate // 64
     if not hop_length:
         hop_length = n_fft // 32
+    if window is None:
+        window = torch.ones(n_fft)
+    window = window.to(input.device)
     batch_size, channels, samples = input.shape
     if not isinstance(shift, Fraction):
         shift = 2.0 ** (float(shift) / bins_per_octave)
@@ -152,12 +158,14 @@ def pitch_shift(
     output = input
     output = output.reshape(batch_size * channels, samples)
     v011 = version.parse(torchaudio.__version__) >= version.parse("0.11.0")
-    output = torch.stft(output, n_fft, hop_length, return_complex=v011)[None, ...]
+    output = torch.stft(output, n_fft, hop_length, return_complex=v011, window=window)[
+        None, ...
+    ]
     stretcher = T.TimeStretch(
         fixed_rate=float(1 / shift), n_freq=output.shape[2], hop_length=hop_length
     ).to(input.device)
     output = stretcher(output)
-    output = torch.istft(output[0], n_fft, hop_length)
+    output = torch.istft(output[0], n_fft, hop_length, window=window)
     output = resampler(output)
     del resampler, stretcher
     if output.shape[1] >= input.shape[2]:
